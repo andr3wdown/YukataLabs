@@ -130,7 +130,6 @@ class CrawlController extends Controller
                 });*/
                 $page = [];
                 $page['pageUrl'] = $item;
-                $page['feeds'] = [];
 
                 $pageLocation = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
                     return $node->text();
@@ -188,6 +187,7 @@ class CrawlController extends Controller
 
                     $pageData = [];
                     $pageData['info'] = $page;
+                    $pageData['feeds'] = [];
 
                     $slug = strtolower($page['pageName']);
                     $slug = str_replace(' ', '-', $slug);
