@@ -123,12 +123,12 @@ class CrawlController extends Controller
         foreach($items as $iKey => $item)
         {
             $inCrawl = $client->request('GET', $item);
-            $location = $inCrawl->filter('')->each(function($node) {
+            $location = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
                 return $node->text();
             });
 
-            if(!empty($location[0])) {
-                $locData[] = $location[0];
+            if(!empty($location[1])) {
+                $locData[] = $location[1];
             } else {
                 $locData[] = "";
             }
