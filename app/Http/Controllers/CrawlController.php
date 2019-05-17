@@ -96,7 +96,7 @@ class CrawlController extends Controller
             }
         }
 
-        return response()->json(['feedData' => $feedData]);
+        return response()->json(['feedData' => $items]);
         
     }
 }
