@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use Symfony\Component\Panther\DomCrawler\Crawler;
+use Symfony\Component\DomCrawler\Crawler;
 
 class CrawlController extends Controller
 {
