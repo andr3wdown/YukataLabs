@@ -62,10 +62,10 @@ class CrawlController extends Controller
             return $node->html();
         });
 
-        /*$feedData = [];
+        $feedData = [];
         foreach($items as $iKey => $item)
         {
-            $crawler = \Symfony\Component\Panther\DomCrawler\Crawler($item);
+            $crawler = \Symfony\Component\DomCrawler\Crawler($item);
             
             foreach($data['feed']['objects'] as $oKey => $obj)
             {
@@ -94,7 +94,7 @@ class CrawlController extends Controller
                     $feedData[$iKey][$obj['key']] = "";
                 }
             }
-        }*/
+        }
 
         return response()->json(['feedData' => $items]);
         
