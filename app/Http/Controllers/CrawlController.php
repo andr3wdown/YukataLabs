@@ -114,80 +114,97 @@ class CrawlController extends Controller
     {
         $client = \Symfony\Component\Panther\Client::createChromeClient();
 
+        //for($p = 1; $p < 20; $p++) {
+            $crawler = $client->request('GET', 'https://www.igdb.com/companies?page=317');
 
-        $crawler = $client->request('GET', 'https://www.igdb.com/companies?page=1');
-
-        $items = $crawler->filter('.main-container .content .col-lg-9 table > tbody tr td a')->each(function ($node) {
-            return $node->attr('href');
-        });
-
-        $companyData = [];
-        foreach($items as $iKey => $item)
-        {
-            $inCrawl = $client->request('GET', $item);
-            /*$location = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
-                return $node->text();
-            });*/
-            $page = [];
-            $page['pageUrl'] = $item;
-            $page['feeds'] = [];
-
-            $pageLocation = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
-                return $node->text();
+            $items = $crawler->filter('.main-container .content .col-lg-9 table > tbody tr td a')->each(function ($node) {
+                return $node->attr('href');
             });
-            if(!empty($pageLocation[1])) {
-                $page['pageLocation'] = $pageLocation[1];
-            } else {
-                $page['pageLocation'] = "";
-            }
 
-            if (strpos($page['pageLocation'], 'Finland') !== false) {
-                $pageName = $inCrawl->filter('#main-contain main #content-page div div div h1 span')->each(function($node) {
+            $companyData = [];
+            foreach($items as $iKey => $item)
+            {
+                $inCrawl = $client->request('GET', $item);
+                /*$location = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
+                    return $node->text();
+                });*/
+                $page = [];
+                $page['pageUrl'] = $item;
+                $page['feeds'] = [];
+
+                $pageLocation = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
                     return $node->text();
                 });
-                if(!empty($pageName[0])) {
-                    $page['pageName'] = $pageName[0];
+                if(!empty($pageLocation[1])) {
+                    $page['pageLocation'] = $pageLocation[1];
                 } else {
-                    $page['pageName'] = "";
-                }
-                 
-                $pageLogo = $inCrawl->filter('div.col-sm-4 img.img-responsive.logo_med')->each(function($node) {
-                    return $node->attr('src');
-                });
-
-                if(!empty($pageLogo[0])) {
-                    $page['pageLogo'] = $pageLogo[0];
-                } else {
-                    $page['pageLogo'] = "";
+                    $page['pageLocation'] = "";
                 }
 
-                $pageSite = $inCrawl->filter('div#content-page.content .btn-group a.btn-default')->each(function ($node) {
-                    return $node->attr('href');
-                });
-
-                if(!empty($pageSite[0])) {
-                    $page['pageSite'] = $pageSite[0];
-                    $webCrawl = $client->request('GET', $pageSite[0]);
-
-                    $pageDescription = $webCrawl->filter('html head meta[name="description"]')->each(function ($node) {
-                        return $node->attr('content');
+                if (strpos($page['pageLocation'], 'Finland') !== false) {
+                    $pageName = $inCrawl->filter('#main-contain main #content-page div div div h1 span')->each(function($node) {
+                        return $node->text();
+                    });
+                    if(!empty($pageName[0])) {
+                        $page['pageName'] = $pageName[0];
+                    } else {
+                        $page['pageName'] = "";
+                    }
+                    
+                    $pageLogo = $inCrawl->filter('div.col-sm-4 img.img-responsive.logo_med')->each(function($node) {
+                        return $node->attr('src');
                     });
 
-                    if(!empty($pageDescription[0])) {
-                        $page['pageDescription'] = $pageDescription[0];
+                    if(!empty($pageLogo[0])) {
+                        $page['pageLogo'] = $pageLogo[0];
                     } else {
-                        $page['pageDescription'] = "";
+                        $page['pageLogo'] = "";
                     }
 
-                } else {
-                    $page['pageSite'] = "";
-                    $page['pageDescription'] = "";
+                    $pageSite = $inCrawl->filter('div#content-page.content .btn-group a.btn-default')->each(function ($node) {
+                        return $node->attr('href');
+                    });
+
+                    if(!empty($pageSite[0])) {
+                        $page['pageSite'] = $pageSite[0];
+                        $webCrawl = $client->request('GET', $pageSite[0]);
+
+                        $pageDescription = $webCrawl->filter('html head meta[name="description"]')->each(function ($node) {
+                            return $node->attr('content');
+                        });
+
+                        if(!empty($pageDescription[0])) {
+                            $page['pageDescription'] = $pageDescription[0];
+                        } else {
+                            $page['pageDescription'] = "";
+                        }
+
+                    } else {
+                        $page['pageSite'] = "";
+                        $page['pageDescription'] = "";
+                    }
+        
+                    $companyData[] = $page;
+
+                    $pageData = [];
+                    $pageData['info'] = $page;
+
+                    $slug = strtolower($page['pageName']);
+                    $slug = str_replace(' ', '-', $slug);
+                    $slug = preg_replace('/[^A-Za-z0-9\-]/', '', $slug);
+                    $slug = preg_replace('/-+/', '-', $slug);
+
+                    if(strlen($slug) > 64)
+                    {
+                        $slug = substr($slug, 0, 64);
+                    }
+
+                    $pageData = json_encode($pageData, JSON_PRETTY_PRINT);
+                    file_put_contents(storage_path()."/feeds/${slug}.json", stripslashes($pageData));
                 }
-    
-                $companyData[] = $page;
             }
-            
-        }
+        //}
+        
 
         return response()->json(['companyData' => $companyData]);
     }
