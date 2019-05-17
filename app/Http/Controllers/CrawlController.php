@@ -64,7 +64,7 @@ class CrawlController extends Controller
             return $node->html();
         });
 
-        /*$feedData = [];
+        $feedData = [];
         foreach($items as $iKey => $item)
         {
             $crawler = new Crawler($item);
@@ -96,9 +96,9 @@ class CrawlController extends Controller
                     $feedData[$iKey][$obj['key']] = "";
                 }
             }
-        }*/
+        }
 
-        return response()->json(['feedData' => $items]);
+        return response()->json(['feedData' => $feedData]);
         
     }
 }
