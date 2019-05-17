@@ -132,20 +132,20 @@ class CrawlController extends Controller
                 $pageLocation = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
                     return $node->text();
                 });
-                if(!empty($pageLocation[0]) && strpos($page['pageLocation'], 'Finland') !== false) {
+                if(!empty($pageLocation[0]) && strpos($pageLocation[0], 'Finland') !== false) {
                     $page['pageLocation'] = $pageLocation[0];
                 } else {
                     $page['pageLocation'] = "";
                 }
 
-                if(!empty($pageLocation[1]) && strpos($page['pageLocation'], 'Finland') !== false) {
-                    $page['pageLocation'] = $pageLocation[0];
+                if(!empty($pageLocation[1]) && strpos($pageLocation[1], 'Finland') !== false) {
+                    $page['pageLocation'] = $pageLocation[1];
                 } else {
                     $page['pageLocation'] = "";
                 }
 
-                if(!empty($pageLocation[2]) && strpos($page['pageLocation'], 'Finland') !== false) {
-                    $page['pageLocation'] = $pageLocation[0];
+                if(!empty($pageLocation[2]) && strpos($pageLocation[2], 'Finland') !== false) {
+                    $page['pageLocation'] = $pageLocation[2];
                 } else {
                     $page['pageLocation'] = "";
                 }
