@@ -160,8 +160,11 @@ class CrawlController extends Controller
                 $gameLink = $gameCrawl->filter('.media-body > a')->each(function($node) {
                     return $node->attr('href');
                 });
-
-                $page[$iKey]['pageGames']['gameLink'] = $gameLink[0];
+                if(!empty($gameLink[0])) {
+                    $page[$iKey]['pageGames']['gameLink'] = $gameLink[0];
+                } else {
+                    $page[$iKey]['pageGames']['gameLink'] = "";
+                }
             }
 
             $companyData[] = $page;
