@@ -127,15 +127,6 @@ class CrawlController extends Controller
                 return $node->text();
             });*/
             $page = [];
-            
-            $pageName = $inCrawl->filter('#main-contain main #content-page div div div h1 span')->each(function($node) {
-                return $node->text();
-            });
-            if(!empty($pageName[0])) {
-                $page['pageName'] = $pageName[0];
-            } else {
-                $page['pageName'] = "";
-            }
 
             $pageLocation = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
                 return $node->text();
@@ -146,28 +137,49 @@ class CrawlController extends Controller
                 $page['pageLocation'] = "";
             }
 
-            $pageLogo = $inCrawl->filter('div.col-sm-4 img.img-responsive.logo_med')->each(function($node) {
-                return $node->attr('src');
-            });
-
-            $games = $inCrawl->filter('.game-list-container .media')->each(function($node) {
-                return $node->html();
-            });
-
-            foreach($games as $gKey => $game) {
-                $gameCrawl = new Crawler($game);
-
-                $gameLink = $gameCrawl->filter('.media-body > a')->each(function($node) {
-                    return $node->attr('href');
+            if (strpos($page['pageLocation'], 'Finland') !== false) {
+                $pageName = $inCrawl->filter('#main-contain main #content-page div div div h1 span')->each(function($node) {
+                    return $node->text();
                 });
-                if(!empty($gameLink[0])) {
-                    $page[$iKey]['pageGames']['gameLink'] = $gameLink[0];
+                if(!empty($pageName[0])) {
+                    $page['pageName'] = $pageName[0];
                 } else {
-                    $page[$iKey]['pageGames']['gameLink'] = "";
+                    $page['pageName'] = "";
                 }
+    
+                $pageLogo = $inCrawl->filter('div.col-sm-4 img.img-responsive.logo_med')->each(function($node) {
+                    return $node->attr('src');
+                });
+    
+                $gamePagination = $inCrawl->filter('.tab-content div[data-react-class="GenericGameList"]')->each(function($node) {
+                    return $node->attr('data-react-props');
+                });
+    
+                $gamePagination = json_decode($gamePagination[0]);
+                for($a = 0; a < $gamePagination['games']['pagination']['pages']; $a++) {
+                    $gameCrawl = $client->request('GET', 'https://www.igdb.com/companies/frozenbyte?rating=desc&page='.$a + 1);
+    
+                    $games = $gameCrawl->filter('.game-list-container .media')->each(function($node) {
+                        return $node->html();
+                    }); 
+    
+                    foreach($games as $gKey => $game) {
+                        $gameCrawl = new Crawler($game);
+        
+                        $gameLink = $gameCrawl->filter('.media-body > a')->each(function($node) {
+                            return $node->attr('href');
+                        });
+    
+                        if(!empty($gameLink[0])) {
+                            $page['pageGames']['gameLink'] = $gameLink[0];
+                        } else {
+                            $page['pageGames']['gameLink'] = "";
+                        }
+                    }
+                }
+    
+                $companyData[] = $page;
             }
-
-            $companyData[] = $page;
             
         }
 
