@@ -1,0 +1,27 @@
+{
+    "info": {
+        "title": "Bon Games",
+        "description": "Bon Games was founded in 2016. The story begun in 2011 when CEO Ilkka Immonen and CCO Taneli Roininen collaborated in a mobile game project for Habbo Hotel. The project sparkled an idea to start a mobile game development studio together. After a lot of brainstorming and beers, Bon was founded in 2016.",
+        "tags": "",
+        "url": "http://bongames.fi/#jobs",
+        "icon": "http://bongames.fi/wp/wp-content/themes/bongames/imgs/somelogo.jpg"
+    },
+    "feed": {
+        "container": ".sc-17uq8ex-0 > article",
+        "objects": [
+            {
+                "key": "jobTitle",
+                "source": "div > a > h1",
+                "type": "text"
+            },
+            {
+                "key": "jobLocation",
+                "source": "",
+                "type": ""
+            },
+            {
+                
+            }
+        ]
+    }
+}

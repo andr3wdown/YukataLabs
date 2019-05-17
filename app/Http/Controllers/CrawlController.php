@@ -1,7 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
 use Symfony\Component\DomCrawler\Crawler;
+use Fusonic\OpenGraph\Consumer;
+use stdClass;
 
 class CrawlController extends Controller
 {
@@ -47,6 +51,75 @@ class CrawlController extends Controller
                 $jobs[] = $job;
             }
         }
+    }
+
+    public function getMeta(Request $request)
+    {
+        $url = $request->query('url');
+        if(empty($url)) {
+            return response()->json(['error' => 'URL not found.'], 400);
+        }
+
+        if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
+            return response()->json(['error' => 'Not a valid URL.'], 400);
+        }
+
+        $consumer = new Consumer();
+        $object = $consumer->loadUrl($url);
+
+        $preview = [];
+        if(empty($object->title)) {
+            $preview['info']['title'] = "";
+        } else {
+            $preview['info']['title'] = $object->title;
+        }
+
+        if(empty($object->description)) {
+            $preview['info']['description'] = "";
+        } else {
+            $preview['info']['description'] = $object->description;
+        }
+
+        if(empty($object->url)) {
+            $preview['info']['url'] = $url;
+        } else {
+            $preview['info']['url'] = $object->url;
+        }
+
+        if(!empty($object->images)) {
+            $preview['info']['imageUrl'] = $object->images[0]->url;
+        } else {
+            $preview['info']['imageUrl'] = 0;
+        }
+
+        $slug = strtolower($object->title);
+        $slug = str_replace(' ', '-', $slug);
+        $slug = preg_replace('/[^A-Za-z0-9\-]/', '', $slug);
+        $slug = preg_replace('/-+/', '-', $slug);
+
+        if(strlen($slug) > 64)
+        {
+            $slug = substr($slug, 0, 64);
+        }
+
+        $preview['info']['slug'] = $slug;
+
+        $previewData = json_encode($preview, JSON_PRETTY_PRINT);
+        file_put_contents(storage_path()."/feeds/${slug}.json", stripslashes($previewData));
+
+        return response()->json(['previewData' => stripslashes($previewData)]);
+    }
+
+    public function getCompanies()
+    {
+        $client = \Symfony\Component\Panther\Client::createChromeClient();
+        $crawler = $client->request('GET', 'https://www.igdb.com/companies');
+
+        $items = $crawler->filter('.main-container .content .col-lg-9 table > tbody')->each(function ($node) {
+            return $node->html();
+        });
+
+        return response()->json(['data' => $items]);
     }
 
     public function getFeed($feed)

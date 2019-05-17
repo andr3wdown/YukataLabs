@@ -17,3 +17,6 @@ $router->get('/', function () use ($router) {
 
 $router->get('countJobs/{city}', 'CrawlController@countJobs');
 $router->get('getFeed/{feed}', 'CrawlController@getFeed');
+$router->get('getMeta', 'CrawlController@getMeta');
+
+$router->get('getCompanies', 'CrawlController@getCompanies');
