@@ -113,13 +113,28 @@ class CrawlController extends Controller
     public function getCompanies()
     {
         $client = \Symfony\Component\Panther\Client::createChromeClient();
-        $crawler = $client->request('GET', 'https://www.igdb.com/companies');
+        $crawler = $client->request('GET', 'https://www.igdb.com/companies?page=317');
 
-        $items = $crawler->filter('.main-container .content .col-lg-9 table > tbody tr')->each(function ($node) {
-            return $node->html();
+        $items = $crawler->filter('.main-container .content .col-lg-9 table > tbody tr td a')->each(function ($node) {
+            return $node->attr('href');
         });
 
-        return response()->json(['data' => $items]);
+        $locData = [];
+        foreach($items as $iKey => $item)
+        {
+            $inCrawl = $client->request('GET', $item);
+            $location = $inCrawl->filter('')->each(function($node) {
+                return $node->text();
+            });
+
+            if(!empty($location[0])) {
+                $locData[] = $location[0];
+            } else {
+                $locData[] = "";
+            }
+        }
+
+        return response()->json(['data' => $items, 'locData' => $locData]);
     }
 
     public function getFeed($feed)
