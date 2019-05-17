@@ -164,12 +164,16 @@ class CrawlController extends Controller
 
                 if(!empty($pageSite[0])) {
                     $page['pageSite'] = $pageSite[0];
-                    $consumer = new Consumer();
-                    $object = $consumer->loadUrl($pageSite[0]);
-                    if(empty($object->description)) {
-                        $page['pageDescription'] = "";
+                    $webCrawl = $client->request('GET', $pageSite[0]);
+
+                    $pageDescription = $webCrawl->filter('html head meta[name="description"]')->each(function ($node) {
+                        return $node->attr('content');
+                    });
+
+                    if(!empty($pageDescription[0])) {
+                        $page['pageDescription'] = $pageDescription[0];
                     } else {
-                        $page['pageDescription'] = $object->description;
+                        $page['pageDescription'] = "";
                     }
 
                 } else {
