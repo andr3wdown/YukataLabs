@@ -1,0 +1,19 @@
+{
+    "info": {
+        "title": "Kotaku",
+        "description": "The Gamer's Guide.",
+        "tags": "tech, blog, media, gaming, nerd",
+        "url": "https://kotaku.com",
+        "icon": ""
+    },
+    "feed": {
+        "container": ".post-wrapper > article",
+        "objects": [
+            {
+                "key": "title",
+                "source": "header > h1.headline > a",
+                "type": "text"
+            }
+        ]
+    }
+}
