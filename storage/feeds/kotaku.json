@@ -7,7 +7,7 @@
         "icon": ""
     },
     "feed": {
-        "container": ".sc-17uq8ex-0 ezGIdb > article",
+        "container": ".sc-17uq8ex-0 > article",
         "objects": [
             {
                 "key": "title",
