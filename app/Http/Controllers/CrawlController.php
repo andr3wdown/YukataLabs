@@ -115,7 +115,7 @@ class CrawlController extends Controller
         $client = \Symfony\Component\Panther\Client::createChromeClient();
         $crawler = $client->request('GET', 'https://www.igdb.com/companies');
 
-        $items = $crawler->filter('.main-container .content .col-lg-9 table > tbody')->each(function ($node) {
+        $items = $crawler->filter('.main-container .content .col-lg-9 table > tbody tr')->each(function ($node) {
             return $node->html();
         });
 
