@@ -156,8 +156,8 @@ class CrawlController extends Controller
                 });
     
                 $gamePagination = json_decode($gamePagination[0]);
-                for($a = 0; a < $gamePagination['games']['pagination']['pages']; $a++) {
-                    $gameCrawl = $client->request('GET', 'https://www.igdb.com/companies/frozenbyte?rating=desc&page='.$a + 1);
+                for($a = 0; $a < $gamePagination['games']['pagination']['pages']; $a++) {
+                    $gameCrawl = $client->request('GET', 'https://www.igdb.com'.$gamePagination['games']['pagination']['url'].'?rating=desc&page='.$a + 1);
     
                     $games = $gameCrawl->filter('.game-list-container .media')->each(function($node) {
                         return $node->html();
