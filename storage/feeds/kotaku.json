@@ -11,7 +11,7 @@
         "objects": [
             {
                 "key": "title",
-                "source": "div > a.js_link > h1",
+                "source": "div > a > h1",
                 "type": "text"
             }
         ]
