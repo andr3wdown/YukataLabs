@@ -150,6 +150,12 @@ class CrawlController extends Controller
                 $pageLogo = $inCrawl->filter('div.col-sm-4 img.img-responsive.logo_med')->each(function($node) {
                     return $node->attr('src');
                 });
+
+                if(!empty($pageLogo[0])) {
+                    $page['pageLogo'] = $pageLogo[0];
+                } else {
+                    $page['pageLogo'] = "";
+                }
     
                 $gamePagination = $inCrawl->filter('.tab-content div[data-react-class="GenericGameList"]')->each(function($node) {
                     return $node->attr('data-react-props');
@@ -171,9 +177,9 @@ class CrawlController extends Controller
                         });
     
                         if(!empty($gameLink[0])) {
-                            $page['pageGames']['gameLink'] = $gameLink[0];
+                            $page['pageGames'][]['gameLink'] = $gameLink[0];
                         } else {
-                            $page['pageGames']['gameLink'] = "";
+                            $page['pageGames'][]['gameLink'] = "";
                         }
                     }
                 }
