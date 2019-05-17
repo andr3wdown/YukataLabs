@@ -113,7 +113,9 @@ class CrawlController extends Controller
     public function getCompanies()
     {
         $client = \Symfony\Component\Panther\Client::createChromeClient();
-        $crawler = $client->request('GET', 'https://www.igdb.com/companies?page=317');
+
+
+        $crawler = $client->request('GET', 'https://www.igdb.com/companies?page=1');
 
         $items = $crawler->filter('.main-container .content .col-lg-9 table > tbody tr td a')->each(function ($node) {
             return $node->attr('href');
@@ -128,6 +130,7 @@ class CrawlController extends Controller
             });*/
             $page = [];
             $page['pageUrl'] = $item;
+            $page['feeds'] = [];
 
             $pageLocation = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
                 return $node->text();
@@ -186,7 +189,7 @@ class CrawlController extends Controller
             
         }
 
-        return response()->json(['data' => $items, 'companyData' => $companyData]);
+        return response()->json(['companyData' => $companyData]);
     }
 
     public function getGames($url) 
