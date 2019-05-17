@@ -119,22 +119,28 @@ class CrawlController extends Controller
             return $node->attr('href');
         });
 
-        $locData = [];
+        $companyData = [];
         foreach($items as $iKey => $item)
         {
             $inCrawl = $client->request('GET', $item);
-            $location = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
+            /*$location = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
+                return $node->text();
+            });*/
+            $page = [];
+            $pageName = $crawler->filter('.main-container .content .col-md-9 span[itemprop="name"]')->each(function($node) {
                 return $node->text();
             });
-
-            if(!empty($location[1])) {
-                $locData[] = $location[1];
+            if(!empty($pageName)) {
+                $page['pageName'] = $pageName[0];
             } else {
-                $locData[] = "";
+                $page['pageName'] = "";
             }
+
+            $companyData[] = $page;
+            
         }
 
-        return response()->json(['data' => $items, 'locData' => $locData]);
+        return response()->json(['data' => $items, 'companyData' => $companyData]);
     }
 
     public function getFeed($feed)
