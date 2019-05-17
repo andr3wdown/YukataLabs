@@ -157,11 +157,11 @@ class CrawlController extends Controller
             foreach($games as $gKey => $game) {
                 $gameCrawl = new Crawler($game);
 
-                $gameLink = $gameCrawl->filter('media-body > a')->each(function($node) {
+                $gameLink = $gameCrawl->filter('.media-body > a')->each(function($node) {
                     return $node->attr('href');
                 });
 
-                $page['pageGames']['gameLink'] = $gameLink[0];
+                $page[$iKey]['pageGames']['gameLink'] = $gameLink[0];
             }
 
             $companyData[] = $page;
