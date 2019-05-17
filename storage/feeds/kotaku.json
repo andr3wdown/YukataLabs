@@ -7,11 +7,11 @@
         "icon": ""
     },
     "feed": {
-        "container": ".post-wrapper > article",
+        "container": ".sc-17uq8ex-0 ezGIdb > article",
         "objects": [
             {
                 "key": "title",
-                "source": "header > h1.headline > a",
+                "source": "div > a.js_link > h1",
                 "type": "text"
             }
         ]
