@@ -59,8 +59,8 @@ class CrawlController extends Controller
         $client = \Symfony\Component\Panther\Client::createChromeClient();
         $crawler = $client->request('GET', $data['info']['url']);
         
-        $items = [];
-        $items[] = $crawler->filter($data['feed']['container'])->each(function ($node) {
+        //$items = [];
+        $items = $crawler->filter($data['feed']['container'])->each(function ($node) {
             return $node->html();
         });
 
