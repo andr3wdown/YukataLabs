@@ -161,7 +161,7 @@ class CrawlController extends Controller
                     return $node->attr('href');
                 });
 
-                $page[$iKey]['pageGames']['gameLink'] = $gameLink[0];
+                $page['pageGames']['gameLink'] = $gameLink[0];
             }
 
             $companyData[] = $page;
