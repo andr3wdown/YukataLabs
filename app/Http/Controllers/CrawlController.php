@@ -127,7 +127,7 @@ class CrawlController extends Controller
                 return $node->text();
             });*/
             $page = [];
-            $pageName = $crawler->filter('.main-container .content .col-md-9 span[itemprop="name"]')->each(function($node) {
+            $pageName = $crawler->filter('#main-contain main #content-page div div div h1 span')->each(function($node) {
                 return $node->text();
             });
             if(!empty($pageName)) {
