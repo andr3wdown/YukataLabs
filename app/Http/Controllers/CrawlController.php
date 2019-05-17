@@ -127,6 +127,7 @@ class CrawlController extends Controller
                 return $node->text();
             });*/
             $page = [];
+            $page['pageUrl'] = $item;
 
             $pageLocation = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
                 return $node->text();
@@ -146,7 +147,7 @@ class CrawlController extends Controller
                 } else {
                     $page['pageName'] = "";
                 }
-    
+                 
                 $pageLogo = $inCrawl->filter('div.col-sm-4 img.img-responsive.logo_med')->each(function($node) {
                     return $node->attr('src');
                 });
@@ -156,32 +157,24 @@ class CrawlController extends Controller
                 } else {
                     $page['pageLogo'] = "";
                 }
-    
-                $gamePagination = $inCrawl->filter('.tab-content div[data-react-class="GenericGameList"]')->each(function($node) {
-                    return $node->attr('data-react-props');
+
+                $pageSite = $inCrawl->filter('div#content-page.content .btn-group a.btn-default')->each(function ($node) {
+                    return $node->attr('href');
                 });
-    
-                $gamePagination = json_decode($gamePagination[0], true);
-                for($a = 0; $a < $gamePagination['pagination']['pages']; $a++) {
-                    $gameCrawl = $client->request('GET', 'https://www.igdb.com'.$gamePagination['pagination']['url'].'?rating=desc&page='.(string)($a + 1));
-    
-                    $games = $gameCrawl->filter('.game-list-container .media')->each(function($node) {
-                        return $node->html();
-                    }); 
-    
-                    foreach($games as $gKey => $game) {
-                        $gameCrawl = new Crawler($game);
-        
-                        $gameLink = $gameCrawl->filter('.media-body > a')->each(function($node) {
-                            return $node->attr('href');
-                        });
-    
-                        if(!empty($gameLink[0])) {
-                            $page['pageGames'][]['gameLink'] = $gameLink[0];
-                        } else {
-                            $page['pageGames'][]['gameLink'] = "";
-                        }
+
+                if(!empty($pageSite[0])) {
+                    $page['pageSite'] = $pageSite[0];
+                    $consumer = new Consumer();
+                    $object = $consumer->loadUrl($pageSite[0]);
+                    if(empty($object->description)) {
+                        $page['pageDescription'] = "";
+                    } else {
+                        $page['pageDescription'] = $object->description;
                     }
+
+                } else {
+                    $page['pageSite'] = "";
+                    $page['pageDescription'] = "";
                 }
     
                 $companyData[] = $page;
@@ -190,6 +183,71 @@ class CrawlController extends Controller
         }
 
         return response()->json(['data' => $items, 'companyData' => $companyData]);
+    }
+
+    public function getGames($url) 
+    {
+        $client = \Symfony\Component\Panther\Client::createChromeClient();
+        $crawler = $client->request('GET', $url);
+
+        $gamePagination = $inCrawl->filter('.tab-content div[data-react-class="GenericGameList"]')->each(function($node) {
+            return $node->attr('data-react-props');
+        });
+
+        $gamePagination = json_decode($gamePagination[0], true);
+        for($a = 0; $a < $gamePagination['pagination']['pages']; $a++) {
+            $gameCrawl = $client->request('GET', 'https://www.igdb.com'.$gamePagination['pagination']['url'].'?rating=desc&page='.(string)($a + 1));
+
+            $games = $gameCrawl->filter('.game-list-container .media')->each(function($node) {
+                return $node->html();
+            }); 
+
+            foreach($games as $gKey => $game) {
+                $gameCrawl = new Crawler($game);
+
+                $gameLink = $gameCrawl->filter('.media-body > a')->each(function($node) {
+                    return $node->attr('href');
+                });
+
+                if(!empty($gameLink[0])) {
+                    $singleGame = $client->request('GET', 'https://www.igdb.com'.$gameLink[0]);
+                    
+                    $gameName = $singleGame->filter('')->each(function($node) {
+
+                    });
+
+                    $gameDate = $singleGame->filter('')->each(function($node) {
+
+                    });
+
+                    $gameImage = $singleGame->filters('')->each(function($node) {
+
+                    });
+
+                    $gameGenre = $singleGame->filters('')->each(function($node) {
+
+                    });
+
+                    $gamePlatforms = $singleGame->filters('')->each(function($node) {
+
+                    });
+
+                    $gameDescription = $singleGame->filters('')->each(function($node) {
+
+                    });
+
+                    $gameStore = $singleGame->filters('')->each(function($node) {
+
+                    });
+
+                    $gameShots = $singleGame->filters('')->each(function($node) {
+
+                    });
+
+                }
+            }
+        }
+
     }
 
     public function getFeed($feed)
