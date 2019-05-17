@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Symfony\Component\Panther\DomCrawler\Crawler;
 
 class CrawlController extends Controller
 {
@@ -65,7 +66,7 @@ class CrawlController extends Controller
         $feedData = [];
         foreach($items as $iKey => $item)
         {
-            $crawler = \Symfony\Component\DomCrawler\Crawler($item);
+            $crawler = new Crawler($item);
             
             foreach($data['feed']['objects'] as $oKey => $obj)
             {
