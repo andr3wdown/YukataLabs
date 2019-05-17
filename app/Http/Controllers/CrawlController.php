@@ -114,8 +114,8 @@ class CrawlController extends Controller
     {
         $client = \Symfony\Component\Panther\Client::createChromeClient();
 
-        //for($p = 1; $p < 20; $p++) {
-            $crawler = $client->request('GET', 'https://www.igdb.com/companies?page=317');
+        for($p = 1; $p < 20; $p++) {
+            $crawler = $client->request('GET', 'https://www.igdb.com/companies?page='.(string)($p));
 
             $items = $crawler->filter('.main-container .content .col-lg-9 table > tbody tr td a')->each(function ($node) {
                 return $node->attr('href');
@@ -125,17 +125,27 @@ class CrawlController extends Controller
             foreach($items as $iKey => $item)
             {
                 $inCrawl = $client->request('GET', $item);
-                /*$location = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
-                    return $node->text();
-                });*/
+
                 $page = [];
                 $page['pageUrl'] = $item;
 
                 $pageLocation = $inCrawl->filter('.main-container .content .col-md-9 .panel .col-sm-4 .text-muted')->each(function($node) {
                     return $node->text();
                 });
-                if(!empty($pageLocation[1])) {
-                    $page['pageLocation'] = $pageLocation[1];
+                if(!empty($pageLocation[0]) && strpos($page['pageLocation'], 'Finland') !== false) {
+                    $page['pageLocation'] = $pageLocation[0];
+                } else {
+                    $page['pageLocation'] = "";
+                }
+
+                if(!empty($pageLocation[1]) && strpos($page['pageLocation'], 'Finland') !== false) {
+                    $page['pageLocation'] = $pageLocation[0];
+                } else {
+                    $page['pageLocation'] = "";
+                }
+
+                if(!empty($pageLocation[2]) && strpos($page['pageLocation'], 'Finland') !== false) {
+                    $page['pageLocation'] = $pageLocation[0];
                 } else {
                     $page['pageLocation'] = "";
                 }
@@ -203,7 +213,7 @@ class CrawlController extends Controller
                     file_put_contents(storage_path()."/feeds/${slug}.json", stripslashes($pageData));
                 }
             }
-        //}
+        }
         
 
         return response()->json(['companyData' => $companyData]);
