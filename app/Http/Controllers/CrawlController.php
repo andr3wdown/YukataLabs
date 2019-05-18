@@ -138,16 +138,20 @@ class CrawlController extends Controller
                     $page['pageLocation'] = "";
                 }
 
-                if(!empty($pageLocation[1]) && strpos($pageLocation[1], 'Finland') !== false) {
-                    $page['pageLocation'] = $pageLocation[1];
-                } else {
-                    $page['pageLocation'] = "";
+                if($page['pageLocation'] == "") {
+                    if(!empty($pageLocation[1]) && strpos($pageLocation[1], 'Finland') !== false) {
+                        $page['pageLocation'] = $pageLocation[1];
+                    } else {
+                        $page['pageLocation'] = "";
+                    }                    
                 }
 
-                if(!empty($pageLocation[2]) && strpos($pageLocation[2], 'Finland') !== false) {
-                    $page['pageLocation'] = $pageLocation[2];
-                } else {
-                    $page['pageLocation'] = "";
+                if($page['pageLocation'] == "") {
+                    if(!empty($pageLocation[2]) && strpos($pageLocation[2], 'Finland') !== false) {
+                        $page['pageLocation'] = $pageLocation[2];
+                    } else {
+                        $page['pageLocation'] = "";
+                    }
                 }
 
                 if (strpos($page['pageLocation'], 'Finland') !== false) {
