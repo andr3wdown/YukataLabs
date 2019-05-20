@@ -357,7 +357,7 @@ class CrawlController extends Controller
                 }
 
                 //file_put_contents(storage_path()."/feeds/".$fileInfo->getFilename(), $data);
-                file_put_contents(storage_path()."/feeds/3rd-eye-studios.json", $data);
+                file_put_contents(storage_path()."/feeds/3rd-eye-studios.json", json_encode($data));
             }
 
             return response()->json(['site' => $data]);
