@@ -347,12 +347,13 @@ class CrawlController extends Controller
             //$data = file_get_contents(storage_path()."/feeds/".$fileInfo->getFilename());
             $data = file_get_contents(storage_path()."/feeds/3rd-eye-studios.json");
             $data = json_decode($data, true);
-            if($data['info']['pageLogo'] === 'https://images.igdb.com/igdb/image/upload/t_logo_med/nocover_qhhlj6.jpg') {
+            if($data['info']['pageLogo'] == 'https://images.igdb.com/igdb/image/upload/t_logo_med/nocover_qhhlj6.jpg') {
 
                 $consumer = new Consumer();
                 $object = $consumer->loadUrl($data['info']['pageSite']);
 
                 if(!empty($object->images)) {
+                    return response()->json(['test' => $object->images[0]->url]);
                     $data['info']['pageLogo'] = $object->images[0]->url;
                 }
 
