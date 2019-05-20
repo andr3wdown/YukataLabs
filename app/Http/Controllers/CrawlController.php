@@ -342,10 +342,9 @@ class CrawlController extends Controller
 
     public function detectNoCover()
     {
-        //$dir = new DirectoryIterator(storage_path()."/feeds/");
-        //foreach($dir as $fileInfo) {
-            //$data = file_get_contents(storage_path()."/feeds/".$fileInfo->getFilename());
-            $data = file_get_contents(storage_path()."/feeds/3rd-eye-studios.json");
+        $dir = new DirectoryIterator(storage_path()."/feeds/");
+        foreach($dir as $fileInfo) {
+            $data = file_get_contents(storage_path()."/feeds/".$fileInfo->getFilename());
             $data = json_decode($data, true);
             if($data['info']['pageLogo'] == 'https://images.igdb.com/igdb/image/upload/t_logo_med/nocover_qhhlj6.jpg') {
 
@@ -356,13 +355,11 @@ class CrawlController extends Controller
                     $data['info']['pageLogo'] = $object->images[0]->url;
                 }
 
-                //file_put_contents(storage_path()."/feeds/".$fileInfo->getFilename(), $data);
-                file_put_contents(storage_path()."/feeds/3rd-eye-studios.json", json_encode($data, JSON_UNESCAPED_SLASHES));
+                file_put_contents(storage_path()."/feeds/".$fileInfo->getFilename(), json_encode($data,JSON_UNESCAPED_SLASHES));
             }
-
-            return response()->json(['site' => $data]);
-        //}
+        }
         
+        return response()->json(['success' => 'Done']);
     }
 
     public function createPage($file)
