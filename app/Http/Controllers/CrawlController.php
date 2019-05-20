@@ -353,7 +353,6 @@ class CrawlController extends Controller
                 $object = $consumer->loadUrl($data['info']['pageSite']);
 
                 if(!empty($object->images)) {
-                    return response()->json(['test' => $object->images[0]->url]);
                     $data['info']['pageLogo'] = $object->images[0]->url;
                 }
 
