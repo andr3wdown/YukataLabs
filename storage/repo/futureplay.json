@@ -1,0 +1,23 @@
+{
+    "info":{
+        "pageUrl":"https://www.igdb.com/companies/futureplay",
+        "pageLocation":"Finland",
+        "pageName":"Futureplay",
+        "pageLogo":"http://www.futureplaygames.com/images/headers/bg-4.jpg",
+        "pageSite":"http://www.futureplaygames.com/",
+        "pageDescription":""
+    },
+    "feeds":[
+        {
+            "jobsList": {
+                "jobsUrl":"http://www.futureplaygames.com/join-us/",
+                "container": "section.grey div.positions__post",
+                "readMore": "section.grey div.positions__post a.button",
+                "singleJob": {
+                    "jobTitle": "header div.align-center div.column h1",
+                    "jobOverview":"div.content section .medium-6"
+                }
+            }
+        }
+    ]
+}

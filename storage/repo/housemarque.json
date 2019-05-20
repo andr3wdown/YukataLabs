@@ -7,5 +7,17 @@
         "pageSite": "http://www.housemarque.com/",
         "pageDescription": "Headquartered in Helsinki, Finland, Housemarque is a game developer working non console and PC. True to our core gamer audience, we prioritize nstratified gameplay mechanics and impeccable audiovisual execution to ncreate euphoric gaming experiences."
     },
-    "feeds": []
+    "feeds": [
+        {
+            "jobsList": {
+                "jobsUrl":"https://housemarque.com/careers",
+                "container": ".rbox-opening-list .rbox-jobs-group .rbox-opening-li",
+                "readMore": ".rbox-opening-list .rbox-jobs-group .rbox-opening-li a",
+                "singleJob": {
+                    "jobTitle": ".rbox-opening-detail h2.rbox-job-title",
+                    "jobOverview":".rbox-opening-detail .rbox-job-longdesc"
+                }
+            }
+        }
+    ]
 }

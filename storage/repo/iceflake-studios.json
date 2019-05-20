@@ -1,0 +1,23 @@
+{
+    "info":{
+        "pageUrl":"https://www.igdb.com/companies/iceflake-studios",
+        "pageLocation":"Finland",
+        "pageName":"Iceflake Studios",
+        "pageLogo":"https://iceflake.com/img/og.png",
+        "pageSite":"http://iceflake.com/",
+        "pageDescription":""
+    },
+    "feeds":[
+        {
+            "jobsList": {
+                "jobsUrl":"http://iceflake.com/jobs/",
+                "container": ".container .jobline",
+                "readMore": ".container .jobline a",
+                "singleJob": {
+                    "jobTitle": ".container .col-lg-8 h1",
+                    "jobOverview":".container .col-lg-8"
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "info": {
+        "pageUrl": "",
+        "pageLocation": "Finland",
+        "pageName": "Playhatch",
+        "pageLogo": "https://playhatch.com/wp-content/uploads/2018/12/cropped-hatch-logo-192x192.png",
+        "pageSite": "https://playhatch.com",
+        "pageDescription": "Hatch - Stream premium mobile games."
+    },
+    "feeds": [
+        {
+            "jobsList": {
+                "jobsUrl":"https://playhatch.com/careers/",
+                "container": ".list-positions .job",
+                "readMore": ".list-positions .job",
+                "singleJob": {
+                    "jobTitle": ".support-page-title h1",
+                    "jobOverview":".content .faq .hatch-sp-content"
+                }
+            }
+        }
+    ]
+}

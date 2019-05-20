@@ -308,7 +308,7 @@ class CrawlController extends Controller
 
                         /* Check for 404 (file not found). */
                         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-                        if($httpCode == 404 || $httpCode == 403 || $httpCode == 301) {
+                        if($httpCode == 404 || $httpCode == 403 || $httpCode == 503) {
                             $deadFiles[] = $fileInfo->getFilename();
                         }
                         curl_close($handle);
@@ -359,6 +359,24 @@ class CrawlController extends Controller
             }
         }
         
+        return response()->json(['success' => 'Done']);
+    }
+
+    public function setRepoFeeds()
+    {
+        $dir = new DirectoryIterator(storage_path()."/repo/");
+        foreach($dir as $fileInfo) {
+            $data = file_get_contents(storage_path()."/repo/".$fileInfo->getFilename());
+            $data = json_decode($data, true);
+
+            if($data['info']['pageLogo'] != 'https://images.igdb.com/igdb/image/upload/t_logo_med/nocover_qhhlj6.jpg') {
+                
+                if($data['info']['pageDescription'] != "") {
+                    rename(storage_path()."/repo/".$fileInfo->getFilename(), storage_path()."/feeds/".$fileInfo->getFilename());
+                }
+            }
+        }
+
         return response()->json(['success' => 'Done']);
     }
 

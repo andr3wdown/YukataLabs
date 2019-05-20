@@ -1,0 +1,23 @@
+{
+    "info":{
+        "pageUrl":"https://www.igdb.com/companies/frogmind",
+        "pageLocation":"Finland",
+        "pageName":"Frogmind",
+        "pageLogo":"https://images.igdb.com/igdb/image/upload/t_logo_med/nocover_qhhlj6.jpg",
+        "pageSite":"http://frogmind.com/",
+        "pageDescription":""
+    },
+    "feeds":[
+        {
+            "jobsList": {
+                "jobsUrl":"http://frogmind.com/jobs/",
+                "container": "main#main.post-wrap div.job-excerpt",
+                "readMore": "main#main.post-wrap div.job-excerpt a",
+                "singleJob": {
+                    "jobTitle": "main article header.entry-header h1.title-post",
+                    "jobOverview":"main article div.entry-content"
+                }
+            }
+        }
+    ]
+}

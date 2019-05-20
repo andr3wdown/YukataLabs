@@ -25,3 +25,4 @@ $router->get('detectDead', 'CrawlController@detectDead');
 $router->get('countDeadImages', 'CrawlController@countDeadImages');
 $router->get('detectNoCover', 'CrawlController@detectNoCover');
 
+$router->get('setRepoFeeds', 'CrawlController@setRepoFeeds');
