@@ -356,8 +356,11 @@ class CrawlController extends Controller
                     $data['info']['pageLogo'] = $object->images[0]->url;
                 }
 
-                file_put_contents(storage_path()."/feeds/".$fileInfo->getFilename(), $data);
+                //file_put_contents(storage_path()."/feeds/".$fileInfo->getFilename(), $data);
+                file_put_contents(storage_path()."/feeds/"."/feeds/3rd-eye-studios.json", $data);
             }
+
+            return response()->json(['site' => $data]);
         //}
         
     }
