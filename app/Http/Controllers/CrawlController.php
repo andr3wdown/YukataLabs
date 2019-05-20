@@ -380,12 +380,16 @@ class CrawlController extends Controller
         return response()->json(['success' => 'Done']);
     }
 
-    public function createPage($file)
+    public function downloadImages()
     {
-        $client = new GuzzleHttp\Client();
-        $res = $client->get('https://api.github/user', ['auth' =>  ['user', 'pass']]);
-        echo $res->getStatusCode(); // 200
-        echo $res->getBody();
+        $dir = new DirectoryIterator(storage_path()."/repo/");
+        foreach($dir as $fileInfo) {
+            $data = file_get_contents(storage_path()."/repo/".$fileInfo->getFilename());
+            $data = json_decode($data, true);
+            $random = str_random(16);
+
+            file_put_contents(storage_path()."/images/".$random, file_get_contents($data['info']['pageLogo']));
+        }
     }
 
     public function getFeed($feed)
