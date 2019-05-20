@@ -308,7 +308,7 @@ class CrawlController extends Controller
 
                         /* Check for 404 (file not found). */
                         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-                        if($httpCode == 404 || $httpCode == 403) {
+                        if($httpCode == 404 || $httpCode == 403 || $httpCode == 301) {
                             $deadFiles[] = $fileInfo->getFilename();
                         }
                         curl_close($handle);
