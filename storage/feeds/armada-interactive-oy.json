@@ -1,0 +1,23 @@
+{
+    "info": {
+        "pageUrl": "https://www.igdb.com/companies/armada-interactive-oy",
+        "pageLocation": "Finland",
+        "pageName": "Armada Interactive Oy",
+        "pageLogo": "https://images.igdb.com/igdb/image/upload/t_logo_med/rjk8fhm1ytpf35xayg9d.png",
+        "pageSite": "https://armadainteractive.com/",
+        "pageDescription": "We are a Helsinki-based gaming startup that develops PvP mobile games"
+    },
+    "feeds": [
+        {
+            "jobsList": {
+                "jobsUrl":"https://armadainteractive.com/careers/",
+                "container": ".l-open-positions-grid delay-sequence .l-open-positions-grid__item",
+                "readMore": ".l-open-positions-grid delay-sequence .l-open-positions-grid__item",
+                "singleJob": {
+                    "jobTitle": ".hero-sub-page__container animated fadeInUp h1",
+                    "jobOverview":".postArticle .col-sm-8"
+                }
+            }
+        }
+    ]
+}
