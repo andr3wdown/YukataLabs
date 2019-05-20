@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\DomCrawler\Crawler;
 use Fusonic\OpenGraph\Consumer;
 use stdClass;
+use DirectoryIterator;
 
 class CrawlController extends Controller
 {
@@ -286,6 +287,87 @@ class CrawlController extends Controller
             }
         }
 
+    }
+
+    public function detectDead()
+    {
+        $deadFiles = [];
+        $dir = new DirectoryIterator(storage_path()."/feeds/");
+        foreach ($dir as $fileInfo) {
+            if (!$fileInfo->isDot()) {
+                $data = file_get_contents(storage_path()."/feeds/".$fileInfo->getFilename());
+                $data = json_decode($data, true);
+                if(!empty($data['info']['pageSite'])) {
+        
+                    if (filter_var($data['info']['pageSite'], FILTER_VALIDATE_URL) !== FALSE) {
+                        $handle = curl_init($data['info']['pageSite']);
+                        curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+
+                        /* Get the HTML or whatever is linked in $url. */
+                        $response = curl_exec($handle);
+
+                        /* Check for 404 (file not found). */
+                        $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+                        if($httpCode == 404 || $httpCode == 403) {
+                            $deadFiles[] = $fileInfo->getFilename();
+                        }
+                        curl_close($handle);
+                       
+                    } else {
+                        $deadFiles[] = $fileInfo->getFilename();
+                    }
+                } else {
+                    $deadFiles[] = $fileInfo->getFilename();
+                }
+            }
+        }
+
+        return response()->json(['deadFiles' => $deadFiles]);
+    }
+
+    public function countDeadImages()
+    {
+        $dir = new DirectoryIterator(storage_path()."/feeds/");
+        $deadCount = [];
+        foreach($dir as $fileInfo) {
+            $data = file_get_contents(storage_path()."/feeds/".$fileInfo->getFilename());
+            $data = json_decode($data, true);
+            if($data['info']['pageLogo'] === 'https://images.igdb.com/igdb/image/upload/t_logo_med/nocover_qhhlj6.jpg') {
+                $deadCount[] = $fileInfo->getFileName();
+            }
+        }
+
+        return response()->json(['imageCount' => count($deadCount)]);
+    }
+
+    public function detectNoCover()
+    {
+        //$dir = new DirectoryIterator(storage_path()."/feeds/");
+        //foreach($dir as $fileInfo) {
+            //$data = file_get_contents(storage_path()."/feeds/".$fileInfo->getFilename());
+            $data = file_get_contents(storage_path()."/feeds/3rd-eye-studios.json");
+            $data = json_decode($data, true);
+            if($data['info']['pageLogo'] === 'https://images.igdb.com/igdb/image/upload/t_logo_med/nocover_qhhlj6.jpg') {
+
+                $consumer = new Consumer();
+                $object = $consumer->loadUrl($data['info']['pageSite']);
+
+                if(!empty($object->images)) {
+                    $data['info']['pageLogo'] = $object->images[0]->url;
+                }
+
+                file_put_contents(storage_path()."/feeds/".$fileInfo->getFilename(), $data);
+            }
+        //}
+        
+    }
+
+    public function createPage($file)
+    {
+        $client = new GuzzleHttp\Client();
+        $res = $client->get('https://api.github/user', ['auth' =>  ['user', 'pass']]);
+        echo $res->getStatusCode(); // 200
+        echo $res->getBody();
     }
 
     public function getFeed($feed)

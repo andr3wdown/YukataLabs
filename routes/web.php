@@ -20,3 +20,8 @@ $router->get('getFeed/{feed}', 'CrawlController@getFeed');
 $router->get('getMeta', 'CrawlController@getMeta');
 
 $router->get('getCompanies/{rangeOne}/{rangeTwo}', 'CrawlController@getCompanies');
+
+$router->get('detectDead', 'CrawlController@detectDead');
+$router->get('countDeadImages', 'CrawlController@countDeadImages');
+$router->get('detectNoCover', 'CrawlController@detectNoCover');
+
